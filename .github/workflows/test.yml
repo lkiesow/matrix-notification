@@ -43,4 +43,4 @@ jobs:
         with:
           room: '!gwaqKjZRpCQkpkTVwh:matrix.org'
           message: test
-          token: invalid
+          token: ${{ secrets.MATRIX_TOKEN }}
