@@ -59,8 +59,8 @@ function run() {
             };
             core.info('Sending message');
             const { data, status } = yield axios_1.default.post(url, body);
-            core.info(`data: ${data}`);
             core.info(`status: ${status}`);
+            core.debug(`status: ${JSON.stringify(data)}`);
         }
         catch (error) {
             if (error instanceof Error) {

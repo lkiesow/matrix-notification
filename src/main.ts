@@ -17,9 +17,8 @@ async function run(): Promise<void> {
 
     core.info('Sending message')
     const {data, status} = await axios.post(url, body)
-
-    core.info(`data: ${data}`)
     core.info(`status: ${status}`)
+    core.debug(`status: ${JSON.stringify(data)}`)
   } catch (error) {
     if (error instanceof Error) {
       core.setFailed(error.message)
