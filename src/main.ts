@@ -1,4 +1,5 @@
 import * as core from '@actions/core'
+import axios from 'axios'
 
 async function run(): Promise<void> {
   try {
@@ -9,20 +10,16 @@ async function run(): Promise<void> {
 
     const encodedRoom = encodeURI(room)
     const url = `https://${server}/_matrix/client/r0/rooms/${encodedRoom}/send/m.room.message?access_token=${token}`
-    const body = JSON.stringify({
+    const body = {
       msgtype: 'm.text',
       body: message
-    })
+    }
 
     core.info('Sending message')
-    const response = await fetch(url, {
-      method: 'POST',
-      body
-    })
+    const {data, status} = await axios.post(url, body)
 
-    if (!response.ok) {
-      throw new Error(`Failed to send message: ${response}`)
-    }
+    core.info(`data: ${data}`)
+    core.info(`status: ${status}`)
   } catch (error) {
     if (error instanceof Error) {
       core.setFailed(error.message)
