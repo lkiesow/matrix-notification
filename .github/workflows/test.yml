@@ -1,0 +1,46 @@
+name: 'build-test'
+on: # rebuild any PRs and main branch changes
+  pull_request:
+  push:
+    branches:
+      - main
+      - releases/*
+
+jobs:
+  build: # make sure build/ci work properly
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: use node.js
+        uses: actions/setup-node@v3.6.0
+        with:
+          node-version: 16.x
+
+      - run: |
+          npm install
+
+      - run: |
+          npm run build
+
+      - run: |
+          npm run format
+
+      - run: |
+          npm run lint
+
+      - run: |
+          npm run package
+
+  # make sure the action works on a clean machine without building
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Test sending a message
+        uses: ./
+        with:
+          room: '!gwaqKjZRpCQkpkTVwh:matrix.org'
+          message: test
+          token: invalid

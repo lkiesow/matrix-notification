@@ -1,0 +1,20 @@
+name: Matrix Notification
+description: Send a notification via Matrix
+author: Lars Kiesow
+inputs:
+  server:
+    required: true
+    description: The Matrix home server to send the message to
+    default: matrix.org
+  token:
+    required: true
+    description: Secret token used for authentication
+  room:
+    required: true
+    description: The room to send the message to
+  message:
+    required: true
+    description: The message to send
+runs:
+  using: node16
+  main: dist/index.js
