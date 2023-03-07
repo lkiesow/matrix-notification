@@ -1,10 +1,6 @@
 name: 'build-test'
-on: # rebuild any PRs and main branch changes
-  pull_request:
+on:
   push:
-    branches:
-      - main
-      - releases/*
 
 jobs:
   build: # make sure build/ci work properly
@@ -42,5 +38,5 @@ jobs:
         uses: ./
         with:
           room: '!gwaqKjZRpCQkpkTVwh:matrix.org'
-          message: test
+          message: 'matrix-notification: success'
           token: ${{ secrets.MATRIX_TOKEN }}
