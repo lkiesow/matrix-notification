@@ -1,4 +1,4 @@
-# GitHub Actions to Sens Matrix Notifications
+# GitHub Actions to Send Matrix Notifications
 
 This actions will easily let you send notifications to Matrix rooms.
 
@@ -7,7 +7,7 @@ This actions will easily let you send notifications to Matrix rooms.
 
 
 ```yaml
-- uses: lkiesow/matrix-notification@main
+- uses: lkiesow/matrix-notification@v1
   with:
     # The Matrix home server to send the message to
     # Default: matrix.org
