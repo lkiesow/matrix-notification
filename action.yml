@@ -13,8 +13,12 @@ inputs:
     required: true
     description: The room to send the message to
   message:
-    required: true
+    required: false
     description: The message to send
+  tool:
+    required: true
+    description: If to install the matrix-msg binary
+    default: false
 runs:
   using: node16
   main: dist/index.js
