@@ -44,6 +44,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const axios_1 = __importDefault(__nccwpck_require__(8757));
+const os_1 = __nccwpck_require__(2037);
+const fs_1 = __nccwpck_require__(7147);
+function generate_tool(url) {
+    return `#!/bin/bash
+    set -eu
+    if test "$#" -lt 1; then
+      read body
+    else
+      body="\${1}"
+    fi
+    jq --arg body "\${body}" '.body = $body' <<< '{"msgtype": "m.text", "body": null}' |\
+      curl -s -XPOST -H "Content-Type: application/json" --data-binary @- "${url}"`;
+}
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -51,16 +64,26 @@ function run() {
             const server = core.getInput('server');
             const room = core.getInput('room');
             const message = core.getInput('message');
+            const tool = core.getBooleanInput('tool');
             const encodedRoom = encodeURI(room);
             const url = `https://${server}/_matrix/client/r0/rooms/${encodedRoom}/send/m.room.message?access_token=${token}`;
-            const body = {
-                msgtype: 'm.text',
-                body: message
-            };
-            core.info('Sending message');
-            const { data, status } = yield axios_1.default.post(url, body);
-            core.info(`status: ${status}`);
-            core.debug(`status: ${JSON.stringify(data)}`);
+            if (tool) {
+                core.info('Installing matrix-message binary');
+                const script = generate_tool(url);
+                const home = (0, os_1.homedir)();
+                (0, fs_1.mkdirSync)(`${home}/.local/bin/`, { recursive: true });
+                (0, fs_1.writeFileSync)(`${home}/.local/bin/matrix-msg`, script, { mode: 0o755 });
+            }
+            if (message) {
+                core.info('Sending message');
+                const body = {
+                    msgtype: 'm.text',
+                    body: message
+                };
+                const { data, status } = yield axios_1.default.post(url, body);
+                core.info(`status: ${status}`);
+                core.debug(`status: ${JSON.stringify(data)}`);
+            }
         }
         catch (error) {
             if (error instanceof Error) {

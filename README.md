@@ -19,8 +19,28 @@ This actions will easily let you send notifications to Matrix rooms.
     # Identifier of the room to send the message to
     room: '!gwaqKjZRpCQkpkTVwh:matrix.org'
 
-    # The message to send
+    # The message to send (optional)
     message: Hello world
+
+    # If to install the matrix-msg binary
+    # Default: false
+    tool: false
+```
+
+## Using the `matrix-msg` binary
+
+If `tool` is set to `true`, a binary called `matrix-msg` will be installed
+which can be used to easily send messages throughout the remainder of the GitHub Action job.
+The binary can be used either with the message as the first argument:
+
+```
+matrix-msg "The message"
+```
+
+…or by piping the message into the tool:
+
+```
+echo The message | matrix-msg
 ```
 
 

@@ -40,3 +40,15 @@ jobs:
           room: '!gwaqKjZRpCQkpkTVwh:matrix.org'
           message: 'matrix-notification: success'
           token: ${{ secrets.MATRIX_TOKEN }}
+
+      - name: Test swtting up matrix-msg
+        uses: ./
+        with:
+          room: '!gwaqKjZRpCQkpkTVwh:matrix.org'
+          token: ${{ secrets.MATRIX_TOKEN }}
+          tool: true
+
+      - name: Test matrix-msg
+        run: |
+          matrix-msg 'matrix-notification: matrix-msg arg: success'
+          echo 'matrix-notification: pipe | matrix-msg: success' | matrix-msg
