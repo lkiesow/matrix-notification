@@ -41,6 +41,21 @@ jobs:
           message: 'matrix-notification: success'
           token: ${{ secrets.MATRIX_TOKEN }}
 
+      - name: Test sending a formatted message
+        uses: ./
+        with:
+          room: '!gwaqKjZRpCQkpkTVwh:matrix.org'
+          message: 'matrix-notification: success'
+          formatted_message: 'matrix-notification: <b>formatted</b> success'
+          token: ${{ secrets.MATRIX_TOKEN }}
+
+      - name: Test with formatted message only
+        uses: ./
+        with:
+          room: '!gwaqKjZRpCQkpkTVwh:matrix.org'
+          formatted_message: 'matrix-notification: <b>formatted</b> success'
+          token: ${{ secrets.MATRIX_TOKEN }}
+
       - name: Test swtting up matrix-msg
         uses: ./
         with:
@@ -48,7 +63,16 @@ jobs:
           token: ${{ secrets.MATRIX_TOKEN }}
           tool: true
 
-      - name: Test matrix-msg
+      - name: Test matrix-msg plain text argument
         run: |
           matrix-msg 'matrix-notification: matrix-msg arg: success'
+
+      - name: Test matrix-msg with pipe
+        run: |
           echo 'matrix-notification: pipe | matrix-msg: success' | matrix-msg
+
+      - name: Test matrix-msg with formatted body
+        run: >
+          matrix-msg
+          'matrix-notification: matrix-msg formatted-arg: success'
+          'matrix-notification: matrix-msg <b>formatted-arg</b>: success'
