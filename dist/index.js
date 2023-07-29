@@ -54,8 +54,15 @@ function generate_tool(url) {
     else
       body="\${1}"
     fi
-    jq --arg body "\${body}" '.body = $body' <<< '{"msgtype": "m.text", "body": null}' |\
-      curl -s -XPOST -H "Content-Type: application/json" --data-binary @- "${url}"`;
+    if test "$#" -lt 2; then
+      echo '{"msgtype": "m.text", "body": null}' |\
+        jq --arg body "\${body}" '.body = $body' |\
+        curl -s -XPOST -H "Content-Type: application/json" --data-binary @- "${url}"
+    else
+      echo '{"msgtype": "m.text", "body":" ", "format": "org.matrix.custom.html", "formatted_body": null}' |\
+        jq --arg b "\${1}" --arg f "\${2}" '.body = $b | .formatted_body = $f' |\
+        curl -s -XPOST -H "Content-Type: application/json" --data-binary @- "${url}"
+    fi`;
 }
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -63,7 +70,8 @@ function run() {
             const token = core.getInput('token');
             const server = core.getInput('server');
             const room = core.getInput('room');
-            const message = core.getInput('message');
+            let message = core.getInput('message');
+            const formatted_message = core.getInput('formatted_message');
             const tool = core.getBooleanInput('tool');
             const encodedRoom = encodeURI(room);
             const url = `https://${server}/_matrix/client/r0/rooms/${encodedRoom}/send/m.room.message?access_token=${token}`;
@@ -74,12 +82,21 @@ function run() {
                 (0, fs_1.mkdirSync)(`${home}/.local/bin/`, { recursive: true });
                 (0, fs_1.writeFileSync)(`${home}/.local/bin/matrix-msg`, script, { mode: 0o755 });
             }
+            // if there is just a formatted message, try building a plain-text version
+            if (formatted_message && !message) {
+                core.info('Plain text message missing. Building one from formatted message.');
+                message = formatted_message.replace(/<[^>]+>/g, '');
+            }
             if (message) {
                 core.info('Sending message');
                 const body = {
                     msgtype: 'm.text',
                     body: message
                 };
+                if (formatted_message) {
+                    body.format = 'org.matrix.custom.html';
+                    body.formatted_body = formatted_message;
+                }
                 const { data, status } = yield axios_1.default.post(url, body);
                 core.info(`status: ${status}`);
                 core.debug(`status: ${JSON.stringify(data)}`);
