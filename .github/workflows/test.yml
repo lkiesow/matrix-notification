@@ -34,26 +34,36 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - id: src
+        env:
+          PR_URL: https://github.com/lkiesow/matrix-notification/pull
+        run: >-
+          echo "src=$GITHUB_REF"
+          | sed 's_refs/heads/\(.*\)_(branch \1)_'
+          | sed "s_refs/pull/\(.*\)/merge$$_($PR_URL/\1)_"
+          >> $GITHUB_OUTPUT
+
+
       - name: Test sending a message
         uses: ./
         with:
           room: '!gwaqKjZRpCQkpkTVwh:matrix.org'
-          message: 'matrix-notification: success'
+          message: 'matrix-notification: success ${{ steps.src.outputs.src }}'
           token: ${{ secrets.MATRIX_TOKEN }}
 
       - name: Test sending a formatted message
         uses: ./
         with:
           room: '!gwaqKjZRpCQkpkTVwh:matrix.org'
-          message: 'matrix-notification: success'
-          formatted_message: 'matrix-notification: <b>formatted</b> success'
+          message: 'matrix-notification: success ${{ steps.src.outputs.src }}'
+          formatted_message: 'matrix-notification: <b>formatted</b> success ${{ steps.src.outputs.src }}'
           token: ${{ secrets.MATRIX_TOKEN }}
 
       - name: Test with formatted message only
         uses: ./
         with:
           room: '!gwaqKjZRpCQkpkTVwh:matrix.org'
-          formatted_message: 'matrix-notification: <b>formatted</b> success'
+          formatted_message: 'matrix-notification: <b>formatted</b> success ${{ steps.src.outputs.src }}'
           token: ${{ secrets.MATRIX_TOKEN }}
 
       - name: Test swtting up matrix-msg
@@ -65,14 +75,14 @@ jobs:
 
       - name: Test matrix-msg plain text argument
         run: |
-          matrix-msg 'matrix-notification: matrix-msg arg: success'
+          matrix-msg 'matrix-notification: matrix-msg arg: success ${{ steps.src.outputs.src }}'
 
       - name: Test matrix-msg with pipe
         run: |
-          echo 'matrix-notification: pipe | matrix-msg: success' | matrix-msg
+          echo 'matrix-notification: pipe | matrix-msg: success ${{ steps.src.outputs.src }}' | matrix-msg
 
       - name: Test matrix-msg with formatted body
         run: >
           matrix-msg
-          'matrix-notification: matrix-msg formatted-arg: success'
-          'matrix-notification: matrix-msg <b>formatted-arg</b>: success'
+          'matrix-notification: matrix-msg formatted-arg: success ${{ steps.src.outputs.src }}'
+          'matrix-notification: matrix-msg <b>formatted-arg</b>: success ${{ steps.src.outputs.src }}'
