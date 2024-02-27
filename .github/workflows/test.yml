@@ -66,7 +66,7 @@ jobs:
           formatted_message: 'matrix-notification: <b>formatted</b> success ${{ steps.src.outputs.src }}'
           token: ${{ secrets.MATRIX_TOKEN }}
 
-      - name: Test swtting up matrix-msg
+      - name: Test setting up matrix-msg
         uses: ./
         with:
           room: '!gwaqKjZRpCQkpkTVwh:matrix.org'
