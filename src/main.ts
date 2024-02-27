@@ -35,7 +35,7 @@ async function run(): Promise<void> {
     const url = `https://${server}/_matrix/client/r0/rooms/${encodedRoom}/send/m.room.message?access_token=${token}`
 
     if (tool) {
-      core.info('Installing matrix-message binary')
+      core.info('Installing matrix-msg binary')
       const script = generate_tool(url)
       const home = homedir()
       mkdirSync(`${home}/.local/bin/`, {recursive: true})
