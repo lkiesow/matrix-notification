@@ -49,6 +49,10 @@ const fs_1 = __nccwpck_require__(7147);
 function generate_tool(url) {
     return `#!/bin/bash
     set -eu
+    if ! command -v jq > /dev/null; then
+      echo 'ERROR: "jq" not installed'
+      exit 1
+    fi
     if test "$#" -lt 1; then
       read body
     else
