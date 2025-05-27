@@ -15,6 +15,10 @@ inputs:
   message:
     required: false
     description: The message to send
+  message_type:
+    required: false
+    description: The matrix msgtype to use. Set to "m.notice" to reduce notification intensity, and indicate that other bots should not respond.
+    default: m.text
   formatted_message:
     required: false
     description: An HTML formatted version of the message to send
