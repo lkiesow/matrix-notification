@@ -10,17 +10,28 @@ function generate_tool(url: string): string {
       echo 'ERROR: "jq" not installed'
       exit 1
     fi
+    message_type="m.text"
+    if test "$#" -ge 2; then
+      case "\${1}" in
+      --message-type)
+        message_type="\${2}"
+        shift 2
+        ;;
+      *)
+        ;;
+      esac
+    fi
     if test "$#" -lt 1; then
       read body
     else
       body="\${1}"
     fi
     if test "$#" -lt 2; then
-      echo '{"msgtype": "m.text", "body": null}' |\
+      echo '{"msgtype": "\${message_type}", "body": null}' |\
         jq --arg body "\${body}" '.body = $body' |\
         curl -s -XPOST -H "Content-Type: application/json" --data-binary @- "${url}"
     else
-      echo '{"msgtype": "m.text", "body":" ", "format": "org.matrix.custom.html", "formatted_body": null}' |\
+      echo '{"msgtype": "\${message_type}", "body":" ", "format": "org.matrix.custom.html", "formatted_body": null}' |\
         jq --arg b "\${1}" --arg f "\${2}" '.body = $b | .formatted_body = $f' |\
         curl -s -XPOST -H "Content-Type: application/json" --data-binary @- "${url}"
     fi`
@@ -34,6 +45,7 @@ async function run(): Promise<void> {
     let message: string = core.getInput('message')
     const formatted_message: string = core.getInput('formatted_message')
     const tool: boolean = core.getBooleanInput('tool')
+    const message_type: string = core.getInput('message_type')
 
     const encodedRoom = encodeURI(room)
     const url = `https://${server}/_matrix/client/r0/rooms/${encodedRoom}/send/m.room.message?access_token=${token}`
@@ -57,7 +69,7 @@ async function run(): Promise<void> {
     if (message) {
       core.info('Sending message')
       const body: Record<string, string> = {
-        msgtype: 'm.text',
+        msgtype: message_type,
         body: message
       }
       if (formatted_message) {
