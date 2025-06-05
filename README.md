@@ -19,10 +19,14 @@ This actions will easily let you send notifications to Matrix rooms.
     # Identifier of the room to send the message to
     room: '!gwaqKjZRpCQkpkTVwh:matrix.org'
 
+    # The type of message to send
+    # Default: m.text
+    message_type: m.notice
+
     # The message to send (optional)
     message: Hello world
 
-    # An HTML formatted version of the message to send
+    # An HTML formatted version of the message to send (optional)
     formatted_message: Hello <b>World</b>!
 
     # If to install the matrix-msg binary
