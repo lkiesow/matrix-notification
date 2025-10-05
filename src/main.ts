@@ -27,11 +27,11 @@ function generate_tool(url: string): string {
       body="\${1}"
     fi
     if test "$#" -lt 2; then
-      echo '{"msgtype": "\${message_type}", "body": null}' |\
+      echo '{"msgtype": "'"\${message_type}"'", "body": null}' |\
         jq --arg body "\${body}" '.body = $body' |\
         curl -s -XPOST -H "Content-Type: application/json" --data-binary @- "${url}"
     else
-      echo '{"msgtype": "\${message_type}", "body":" ", "format": "org.matrix.custom.html", "formatted_body": null}' |\
+      echo '{"msgtype": "'"\${message_type}"'", "body":" ", "format": "org.matrix.custom.html", "formatted_body": null}' |\
         jq --arg b "\${1}" --arg f "\${2}" '.body = $b | .formatted_body = $f' |\
         curl -s -XPOST -H "Content-Type: application/json" --data-binary @- "${url}"
     fi`
