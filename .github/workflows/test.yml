@@ -70,7 +70,7 @@ jobs:
         uses: ./
         with:
           room: '!gwaqKjZRpCQkpkTVwh:matrix.org'
-          message: 'matrix-notification: success ${{ steps.src.outputs.src }}'
+          message: 'matrix-notification: type m.notice success ${{ steps.src.outputs.src }}'
           message_type: 'm.notice'
           token: ${{ secrets.MATRIX_TOKEN }}
 
@@ -91,7 +91,7 @@ jobs:
 
       - name: Test matrix-msg with custom --message-type
         run: |
-          matrix-msg --message-type 'm.notice' 'matrix-notification: matrix-msg arg: success ${{ steps.src.outputs.src }}'
+          matrix-msg --message-type 'm.notice' 'matrix-notification: matrix-msg m.notice: success ${{ steps.src.outputs.src }}'
 
       - name: Test matrix-msg with formatted body
         run: >
