@@ -66,6 +66,7 @@ An easy way to register a new session token is to use cURL to log-in via API:
 ❯ USER=@someone:matrix.org
 ❯ PASS=someVerySecretPassword
 ❯ curl -XPOST \
+  -H 'Content-Type: application/json' \
   -d '{"type":"m.login.password", "user":"'"${USER}"'", "password":"'"${PASS}"'"}' \
   "https://matrix.org/_matrix/client/r0/login"
 {..., "access_token":"aSecretSessionToken", ...}
