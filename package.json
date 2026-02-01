@@ -25,7 +25,7 @@
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^2.0.1",
-    "axios": "^1.13.2"
+    "axios": "^1.13.4"
   },
   "devDependencies": {
     "@eslint/compat": "^2.0.0",
