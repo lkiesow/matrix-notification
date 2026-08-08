@@ -3,13 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "description": "TypeScript template action",
+  "type": "module",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
     "format": "biome format --write src",
     "format-check": "biome format src",
     "lint": "biome lint src",
-    "package": "ncc build --source-map --license licenses.txt",
+    "package": "esbuild src/main.ts --bundle --platform=node --format=esm --outfile=dist/index.js --sourcemap --banner:js=\"import{createRequire}from'module';const require=createRequire(import.meta.url);\"",
     "all": "npm run build && npm run format && npm run lint && npm run package"
   },
   "repository": {
@@ -24,13 +25,13 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^2.0.1",
+    "@actions/core": "^3.0.1",
     "axios": "^1.18.1"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.7",
     "@types/node": "^26.2.0",
-    "@vercel/ncc": "^0.38.4",
+    "esbuild": "^0.28.1",
     "typescript": "^5.9.3"
   }
 }
