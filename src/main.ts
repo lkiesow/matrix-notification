@@ -1,5 +1,4 @@
 import * as core from '@actions/core'
-import axios from 'axios'
 import {homedir} from 'node:os'
 import {mkdirSync, writeFileSync} from 'node:fs'
 
@@ -76,8 +75,16 @@ async function run(): Promise<void> {
         body.format = 'org.matrix.custom.html'
         body.formatted_body = formatted_message
       }
-      const {data, status} = await axios.post(url, body)
-      core.info(`status: ${status}`)
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(body)
+      })
+      const data = await response.json()
+      if (!response.ok) {
+        throw new Error(`Request failed with status code ${response.status}`)
+      }
+      core.info(`status: ${response.status}`)
       core.debug(`status: ${JSON.stringify(data)}`)
     }
   } catch (error) {
