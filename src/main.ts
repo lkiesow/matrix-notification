@@ -53,8 +53,10 @@ async function run(): Promise<void> {
       core.info('Installing matrix-msg binary')
       const script = generate_tool(url)
       const home = homedir()
-      mkdirSync(`${home}/.local/bin/`, {recursive: true})
-      writeFileSync(`${home}/.local/bin/matrix-msg`, script, {mode: 0o755})
+      const bindir = `${home}/.local/bin`
+      mkdirSync(bindir, {recursive: true})
+      writeFileSync(`${bindir}/matrix-msg`, script, {mode: 0o755})
+      core.addPath(bindir)
     }
 
     // if there is just a formatted message, try building a plain-text version
