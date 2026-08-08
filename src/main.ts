@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 import axios from 'axios'
-import {homedir} from 'os'
-import {mkdirSync, writeFileSync} from 'fs'
+import {homedir} from 'node:os'
+import {mkdirSync, writeFileSync} from 'node:fs'
 
 function generate_tool(url: string): string {
   return `#!/bin/bash
