@@ -39,6 +39,6 @@
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-prettier": "^5.5.4",
     "prettier": "3.8.1",
-    "typescript": "^5.9.3"
+    "typescript": "^7.0.2"
   }
 }
